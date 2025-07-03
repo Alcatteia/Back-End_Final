@@ -1,0 +1,500 @@
+{
+  "info": {
+    "name": "🏦 Banco Alcatteia API - JWT Corrigida",
+    "_postman_id": "banco-alcatteia-jwt-2025",
+    "description": "✅ Coleção CORRIGIDA da API do Banco Alcatteia\n\n🔑 INSTRUÇÕES:\n1. Execute primeiro o LOGIN\n2. Token JWT será salvo automaticamente\n3. Todos os endpoints usam Bearer token\n\n👤 USUÁRIOS DE TESTE:\n• ana.silva@bancoalcatteia.com / 123456 (RH)\n• carlos.mendes@bancoalcatteia.com / 123456 (LIDER)\n• fernanda.costa@bancoalcatteia.com / 123456 (FUNC)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "jwt_token",
+      "value": ""
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "🔐 AUTENTICAÇÃO",
+      "item": [
+        {
+          "name": "1. LOGIN - Execute Primeiro!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('jwt_token', response.token);",
+                  "    console.log('✅ Token JWT salvo!');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"ana.silva@bancoalcatteia.com\",\n    \"senha\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Informações do Usuário",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 USUÁRIOS",
+      "item": [
+        {
+          "name": "Listar Usuários (RH/LIDER)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "usuarios"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Usuário por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/usuarios/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "usuarios", "1"]
+            }
+          }
+        },
+        {
+          "name": "Criar Usuário (RH/LIDER)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Usuário Teste\",\n    \"email\": \"teste@bancoalcatteia.com\",\n    \"senha\": \"123456\",\n    \"cpf\": \"987.654.321-00\",\n    \"telefone\": \"(11) 99999-9999\",\n    \"tipoUsuario\": \"FUNC\",\n    \"dataNascimento\": \"1995-03-15\",\n    \"ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "usuarios"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📋 TAREFAS",
+      "item": [
+        {
+          "name": "Listar Tarefas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tarefas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tarefas"]
+            }
+          }
+        },
+        {
+          "name": "Criar Tarefa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Tarefa via Postman\",\n    \"descricao\": \"Teste de criação via API\",\n    \"criadoPorId\": 1,\n    \"responsavelId\": 2,\n    \"dataEntrega\": \"2025-12-31\",\n    \"estimativaHoras\": 8.0,\n    \"prioridade\": \"MEDIA\",\n    \"status\": \"TODO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tarefas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tarefas"]
+            }
+          }
+        },
+        {
+          "name": "Convidar Participante",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tarefas/1/convidar/3",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tarefas", "1", "convidar", "3"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "😊 HUMOR",
+      "item": [
+        {
+          "name": "1. Registrar Humor Diário",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"usuarioId\": 1,\n    \"humor\": \"FELIZ\",\n    \"observacao\": \"Dia produtivo! Consegui finalizar todas as tasks planejadas.\",\n    \"anonimo\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/registrar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "registrar"]
+            },
+            "description": "Registra humor diário do usuário. Apenas um registro por dia é permitido.\n\nHumores disponíveis:\n- FELIZ: Feliz 😊\n- ANIMADO: Animado 🎉\n- CALMO: Calmo 😌\n- DESANIMADO: Desanimado 😔\n- ESTRESSADO: Estressado 😰"
+          }
+        },
+        {
+          "name": "2. Meu Humor Hoje",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/meu-humor-hoje",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "meu-humor-hoje"]
+            },
+            "description": "Busca o humor registrado hoje pelo usuário logado"
+          }
+        },
+        {
+          "name": "3. Meus Humores - Período",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/meus-humores?inicio=2025-01-01&fim=2025-01-31",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "meus-humores"],
+              "query": [
+                {
+                  "key": "inicio",
+                  "value": "2025-01-01",
+                  "description": "Data de início (formato: YYYY-MM-DD)"
+                },
+                {
+                  "key": "fim",
+                  "value": "2025-01-31",
+                  "description": "Data de fim (formato: YYYY-MM-DD)"
+                }
+              ]
+            },
+            "description": "Lista os humores do usuário logado em um período específico"
+          }
+        },
+        {
+          "name": "4. Comentários Recentes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/comentarios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "comentarios"]
+            },
+            "description": "Busca comentários não anônimos dos últimos 15 dias para exibir em cards laterais"
+          }
+        },
+        {
+          "name": "5. Registrar Humor Anônimo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"usuarioId\": 1,\n    \"humor\": \"ESTRESSADO\",\n    \"observacao\": \"Muita pressão no trabalho hoje, prazos apertados.\",\n    \"anonimo\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/registrar",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "registrar"]
+            },
+            "description": "Registra humor com comentário anônimo - o nome do usuário não será exibido"
+          }
+        },
+        {
+          "name": "RH/LIDER - Relatório Quinzenal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/relatorio-quinzenal?inicio=2025-01-01&fim=2025-01-15",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "relatorio-quinzenal"],
+              "query": [
+                {
+                  "key": "inicio",
+                  "value": "2025-01-01",
+                  "description": "Data de início do relatório"
+                },
+                {
+                  "key": "fim",
+                  "value": "2025-01-15",
+                  "description": "Data de fim do relatório"
+                }
+              ]
+            },
+            "description": "Gera relatório completo com estatísticas, tendências e análises (apenas RH/LIDER)"
+          }
+        },
+        {
+          "name": "RH/LIDER - Relatório Padrão (15 dias)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/relatorio-default",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "relatorio-default"]
+            },
+            "description": "Relatório dos últimos 15 dias (pré-configurado)"
+          }
+        },
+        {
+          "name": "RH/LIDER - Estatísticas Gerais",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/estatisticas?inicio=2025-01-01&fim=2025-01-31",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "estatisticas"],
+              "query": [
+                {
+                  "key": "inicio",
+                  "value": "2025-01-01",
+                  "description": "Data de início (opcional)"
+                },
+                {
+                  "key": "fim",
+                  "value": "2025-01-31",
+                  "description": "Data de fim (opcional)"
+                }
+              ]
+            },
+            "description": "Estatísticas resumidas do período (apenas RH/LIDER)"
+          }
+        },
+        {
+          "name": "RH/LIDER - Humores de Usuário",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/usuario/3?inicio=2025-01-01&fim=2025-01-31",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "usuario", "3"],
+              "query": [
+                {
+                  "key": "inicio",
+                  "value": "2025-01-01",
+                  "description": "Data de início"
+                },
+                {
+                  "key": "fim",
+                  "value": "2025-01-31",
+                  "description": "Data de fim"
+                }
+              ]
+            },
+            "description": "Lista humores de um usuário específico (apenas RH/LIDER)"
+          }
+        },
+        {
+          "name": "Admin - Listar Todos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor"]
+            },
+            "description": "Lista todos os registros de humor (apenas RH/LIDER)"
+          }
+        },
+        {
+          "name": "Admin - Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "1"]
+            },
+            "description": "Busca registro específico por ID (apenas RH/LIDER)"
+          }
+        },
+        {
+          "name": "Admin - Atualizar Registro",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"usuarioId\": 1,\n    \"humor\": \"CALMO\",\n    \"observacao\": \"Dia tranquilo, sem intercorrências.\",\n    \"anonimo\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "1"]
+            },
+            "description": "Atualiza registro existente (apenas RH/LIDER)"
+          }
+        },
+        {
+          "name": "Admin - Deletar Registro",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "1"]
+            },
+            "description": "Remove registro (apenas RH/LIDER)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎤 KARAOKÊ",
+      "item": [
+        {
+          "name": "Listar Músicas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/musicas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "musicas"]
+            }
+          }
+        },
+        {
+          "name": "Listar Sessões",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/sessoes-karaoke",
+              "host": ["{{base_url}}"],
+              "path": ["api", "sessoes-karaoke"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📢 NOTIFICAÇÕES",
+      "item": [
+        {
+          "name": "Listar Notificações",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notificacoes/usuario/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notificacoes", "usuario", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "🛠️ UTILITÁRIOS",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/actuator/health",
+              "host": ["{{base_url}}"],
+              "path": ["actuator", "health"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+
