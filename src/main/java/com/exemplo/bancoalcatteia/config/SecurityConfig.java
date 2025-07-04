@@ -29,6 +29,7 @@ public class SecurityConfig {
                 // Endpoints públicos
                 .requestMatchers("/usuarios/login", "/usuarios/criar", "/usuarios/logout").permitAll()
                 .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 
