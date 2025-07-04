@@ -1,98 +1,64 @@
-# 📚 Índice da Documentação - Banco Alcatteia
+# Documentação do Backend Alcatteia
 
-## 🗂️ Estrutura da Documentação
+## 📚 **Índice Geral**
 
-A documentação foi organizada em arquivos temáticos para facilitar a consulta e evitar duplicidades:
+### **🚀 Guias Técnicos** (`guides/`)
+- **[TRATAMENTO_ERROS.md](guides/TRATAMENTO_ERROS.md)** - Sistema completo de exceções e tratamento de erros
+- **[COMUNICACAO_CAMADAS_GUIA.md](guides/COMUNICACAO_CAMADAS_GUIA.md)** - Padrões de comunicação entre camadas
+- **[GUIA_PREPARACAO_PRODUCAO.md](guides/GUIA_PREPARACAO_PRODUCAO.md)** - Checklist completo para produção
+- **[GUIA_EXECUCAO.md](guides/GUIA_EXECUCAO.md)** - Como executar o projeto localmente
+- **[ANALISE_COMPARATIVA.md](guides/ANALISE_COMPARATIVA.md)** - Análise comparativa das implementações
+- **[ROTEIRO_MIGRACAO_COMPLETO.md](guides/ROTEIRO_MIGRACAO_COMPLETO.md)** - Roteiro completo de migração
 
-### 📖 Documentação Principal
-- **[README.md](README.md)** - Visão geral e início rápido
-- **[API_GUIDE.md](API_GUIDE.md)** - Guia completo de todos os endpoints da API
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Arquitetura técnica detalhada do sistema
+### **🗃️ Scripts SQL** (`sql/`)
+- **[banco_alcatteia_completo.sql](sql/banco_alcatteia_completo.sql)** - Schema completo do banco de dados
+- **[dados_demonstracao.sql](sql/dados_demonstracao.sql)** - Dados de demonstração principais
+- **[dados_demonstracao_parte2.sql](sql/dados_demonstracao_parte2.sql)** - Dados complementares
+- **[dados_demonstracao_updated.sql](sql/dados_demonstracao_updated.sql)** - Dados atualizados
+- **[migracao_melhorias.sql](sql/migracao_melhorias.sql)** - Script de melhorias e otimizações
+- **[roteiro_migracao.sql](sql/roteiro_migracao.sql)** - Roteiro de migração SQL
+- **[fix_enum_humor.sql](sql/fix_enum_humor.sql)** - Correção de enum de humor
 
-### 🔐 Segurança e Autenticação
-- **[SECURITY.md](SECURITY.md)** - Implementação JWT, roles e permissões
+### **📡 APIs e Postman** (`postman/`)
+- **[BancoAlcatteia_JWT.postman_collection.json](postman/BancoAlcatteia_JWT.postman_collection.json)** - Coleção principal
+- **[Alcatteia_API_Endpoints.json](postman/Alcatteia_API_Endpoints.json)** - Endpoints da API
+- **[validado_Alcatteia API Endpoints.postman_collection](postman/validado_Alcatteia%20API%20Endpoints.postman_collection)** - Coleção validada
+- **[validado_v2_Alcatteia API Endpoints.postman_collection](postman/validado_v2_Alcatteia%20API%20Endpoints.postman_collection)** - Coleção v2 validada
 
-### 🎯 Demonstração e Testes
-- **[DEMO.md](DEMO.md)** - Dados de demonstração e cenários de teste
+### **🏗️ Arquitetura e API**
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Documentação da arquitetura do sistema
+- **[API_GUIDE.md](API_GUIDE.md)** - Guia completo da API REST
+- **[POSTMAN_CORRECTIONS.md](POSTMAN_CORRECTIONS.md)** - Correções e melhorias no Postman
 
-### 🛠️ Desenvolvimento
-- **[REFACTORING.md](REFACTORING.md)** - Resumo das refatorações aplicadas
+### **🚢 Deploy e Produção**
+- **[DEPLOY_REALIZADO.md](DEPLOY_REALIZADO.md)** - Relatório do deploy realizado
+- **[RESUMO_EXECUTIVO.md](RESUMO_EXECUTIVO.md)** - Resumo executivo do projeto
+- **[IMPLEMENTACAO_FINALIZADA.md](IMPLEMENTACAO_FINALIZADA.md)** - Relatório de implementação finalizada
 
-### 📋 Recursos Adicionais
-- **[BancoAlcatteia_JWT.postman_collection.json](BancoAlcatteia_JWT.postman_collection.json)** - Coleção Postman corrigida com JWT
-
-## 🚀 Fluxo de Leitura Recomendado
-
-### Para Novos Desenvolvedores
-1. [README.md](README.md) - Entenda o projeto e execute pela primeira vez
-2. [ARCHITECTURE.md](ARCHITECTURE.md) - Compreenda a arquitetura do sistema
-3. [SECURITY.md](SECURITY.md) - Entenda o sistema de autenticação
-4. [API_GUIDE.md](API_GUIDE.md) - Aprenda a usar todos os endpoints
-
-### Para Usuários Finais
-1. [README.md](README.md) - Visão geral e credenciais de teste
-2. [DEMO.md](DEMO.md) - Dados de demonstração disponíveis
-3. [API_GUIDE.md](API_GUIDE.md) - Exemplos práticos de uso
-
-### Para DevOps/Infraestrutura
-1. [README.md](README.md) - Requisitos e instalação
-2. [ARCHITECTURE.md](ARCHITECTURE.md) - Configurações e variáveis de ambiente
-3. [SECURITY.md](SECURITY.md) - Configurações de segurança
-
-## 📋 Resumo por Arquivo
-
-| Arquivo | Propósito | Público-Alvo |
-|---------|-----------|--------------|
-| README.md | Apresentação e início rápido | Todos |
-| API_GUIDE.md | Exemplos detalhados da API | Desenvolvedores, QA |
-| ARCHITECTURE.md | Documentação técnica | Arquitetos, Desenvolvedores |
-| SECURITY.md | Implementação de segurança | DevOps, Segurança |
-| DEMO.md | Dados e cenários de teste | QA, Usuários |
-| REFACTORING.md | Melhorias aplicadas | Desenvolvedores |
-
-## 🔍 Como Encontrar Informações Específicas
-
-### 🔐 Autenticação e Login
-- **Credenciais de teste**: [README.md](README.md#-usuários-de-teste)
-- **Como fazer login**: [API_GUIDE.md](API_GUIDE.md#sistema-de-autenticacao)
-- **Implementação JWT**: [SECURITY.md](SECURITY.md#autenticacao-jwt)
-
-### 📋 Usando a API
-- **Endpoints principais**: [README.md](README.md#endpoints-principais)
-- **Exemplos completos**: [API_GUIDE.md](API_GUIDE.md)
-- **Coleção Postman**: [BancoAlcatteia_JWT.postman_collection.json](BancoAlcatteia_JWT.postman_collection.json)
-
-### 🏗️ Arquitetura e Tecnologias
-- **Visão geral**: [README.md](README.md#tecnologias)
-- **Detalhes técnicos**: [ARCHITECTURE.md](ARCHITECTURE.md)
-- **Modelo de dados**: [ARCHITECTURE.md](ARCHITECTURE.md#modelo-de-dados)
-
-### 🎯 Testando o Sistema
-- **Usuários de teste**: [README.md](README.md#usuários-de-teste)
-- **Dados de demonstração**: [DEMO.md](DEMO.md)
-- **Cenários de teste**: [DEMO.md](DEMO.md#cenários-de-teste-sugeridos)
-
-### 🚨 Resolução de Problemas
-- **Troubleshooting básico**: [README.md](README.md#troubleshooting)
-- **Problemas de API**: [API_GUIDE.md](API_GUIDE.md#códigos-de-erro-comuns)
-- **Configurações avançadas**: [ARCHITECTURE.md](ARCHITECTURE.md#configurações)
-
-## ✨ Melhorias na Documentação
-
-### ✅ Problemas Resolvidos
-- **Eliminação de duplicidades**: Informações não se repetem entre arquivos
-- **Estrutura clara**: Cada arquivo tem propósito específico
-- **Links internos**: Referências cruzadas entre documentos
-- **Fluxo lógico**: Sequência de leitura recomendada
-
-### 📊 Antes vs Depois
-| Aspecto | Antes | Depois |
-|---------|--------|--------|
-| Arquivos MD | 7 arquivos confusos | 6 arquivos organizados |
-| Duplicidades | Múltiplas | Eliminadas |
-| Navegação | Difícil | Estruturada |
-| Manutenção | Complexa | Simplificada |
+### **🗄️ Banco de Dados**
+- **[dump-railway-202507032302.sql](dump-railway-202507032302.sql)** - Dump do banco Railway
 
 ---
 
-**📝 Última atualização da documentação:** Dezembro 2025 
+## 🎯 **Guia de Uso Rápido**
+
+### **Para Desenvolvedores**
+1. Leia o **[README.md](../README.md)** principal
+2. Configure seguindo **[GUIA_EXECUCAO.md](guides/GUIA_EXECUCAO.md)**
+3. Entenda o sistema de erros em **[TRATAMENTO_ERROS.md](guides/TRATAMENTO_ERROS.md)**
+4. Use as coleções **[Postman](postman/)** para testar APIs
+
+### **Para Deploy**
+1. Siga o **[GUIA_PREPARACAO_PRODUCAO.md](guides/GUIA_PREPARACAO_PRODUCAO.md)**
+2. Execute scripts SQL em **[sql/](sql/)**
+3. Configure ambiente conforme **[ARCHITECTURE.md](ARCHITECTURE.md)**
+
+### **Para Entender o Sistema**
+1. Leia **[ANALISE_COMPARATIVA.md](guides/ANALISE_COMPARATIVA.md)**
+2. Consulte **[COMUNICACAO_CAMADAS_GUIA.md](guides/COMUNICACAO_CAMADAS_GUIA.md)**
+3. Veja **[API_GUIDE.md](API_GUIDE.md)** para endpoints
+
+---
+
+**Última atualização:** Janeiro 2025  
+**Versão:** 2.0.0 
