@@ -34,7 +34,7 @@ public class DashboardController {
     @GetMapping("/{id}")
     public ResponseEntity<DashboardDTO> buscarPorId(@PathVariable Integer id) {
         Dashboard dashboard = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Dashboard com ID " + id + " não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Dashboard com ID " + id + " nao encontrado"));
         return ResponseEntity.ok(toDTO(dashboard));
     }
 
@@ -47,6 +47,7 @@ public class DashboardController {
             dashboard.setUsuario(usuario);
         }
         dashboard.setTipoDashboard(dto.getTipoDashboard());
+        dashboard.setTitulo(dto.getTitulo());
         Dashboard salvo = repository.save(dashboard);
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(salvo));
     }
@@ -54,7 +55,7 @@ public class DashboardController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         if (!repository.existsById(id)) {
-            throw new EntityNotFoundException("Dashboard com ID " + id + " não encontrado");
+            throw new EntityNotFoundException("Dashboard com ID " + id + " nao encontrado");
         }
         repository.deleteById(id);
         return ResponseEntity.noContent().build();

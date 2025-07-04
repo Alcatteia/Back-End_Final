@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class RelatorioDTO {
     private Integer id;
+    private String titulo;
     private String tipo;
     private Long geradoPorId;
     private Long timeId;

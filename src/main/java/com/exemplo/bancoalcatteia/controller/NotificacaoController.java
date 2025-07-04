@@ -4,6 +4,7 @@ import com.exemplo.bancoalcatteia.dto.NotificacaoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,20 +34,16 @@ public class NotificacaoController {
         NotificacaoDTO notificacao = notificacoes.stream()
             .filter(n -> n.getId().equals(notificationId))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> new EntityNotFoundException("Notificação não encontrada com ID: " + notificationId));
             
-        if (notificacao != null) {
-            notificacao.setConfirmacaoLeitura(true);
-            
-            Map<String, String> response = Map.of(
-                "message", "Notificação marcada como lida",
-                "notificationId", notificationId.toString(),
-                "status", "read"
-            );
-            return ResponseEntity.ok(response);
-        }
+        notificacao.setConfirmacaoLeitura(true);
         
-        return ResponseEntity.notFound().build();
+        Map<String, String> response = Map.of(
+            "message", "Notificação marcada como lida",
+            "notificationId", notificationId.toString(),
+            "status", "read"
+        );
+        return ResponseEntity.ok(response);
     }
 
     // Método auxiliar para criar notificações (usado internamente)

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/participation-requests")
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 public class ParticipanteTarefaController {
 
     // Lista temporária para simular persistência - substituir por service real
@@ -62,21 +63,17 @@ public class ParticipanteTarefaController {
         ParticipanteTarefaDTO participacao = participacoesPendentes.stream()
             .filter(p -> p.getId().equals(requestId))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> new EntityNotFoundException("Pedido de participação não encontrado com ID: " + requestId));
             
-        if (participacao != null) {
-            participacao.setStatusParticipacao("ACEITO");
-            participacao.setDataResposta(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            
-            Map<String, String> response = Map.of(
-                "message", "Pedido aceito com sucesso",
-                "requestId", requestId.toString(),
-                "status", "ACEITO"
-            );
-            return ResponseEntity.ok(response);
-        }
+        participacao.setStatusParticipacao("ACEITO");
+        participacao.setDataResposta(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         
-        return ResponseEntity.notFound().build();
+        Map<String, String> response = Map.of(
+            "message", "Pedido aceito com sucesso",
+            "requestId", requestId.toString(),
+            "status", "ACEITO"
+        );
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{requestId}/reject")
@@ -84,20 +81,16 @@ public class ParticipanteTarefaController {
         ParticipanteTarefaDTO participacao = participacoesPendentes.stream()
             .filter(p -> p.getId().equals(requestId))
             .findFirst()
-            .orElse(null);
+            .orElseThrow(() -> new EntityNotFoundException("Pedido de participação não encontrado com ID: " + requestId));
             
-        if (participacao != null) {
-            participacao.setStatusParticipacao("REJEITADO");
-            participacao.setDataResposta(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-            
-            Map<String, String> response = Map.of(
-                "message", "Pedido rejeitado com sucesso",
-                "requestId", requestId.toString(),
-                "status", "REJEITADO"
-            );
-            return ResponseEntity.ok(response);
-        }
+        participacao.setStatusParticipacao("REJEITADO");
+        participacao.setDataResposta(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         
-        return ResponseEntity.notFound().build();
+        Map<String, String> response = Map.of(
+            "message", "Pedido rejeitado com sucesso",
+            "requestId", requestId.toString(),
+            "status", "REJEITADO"
+        );
+        return ResponseEntity.ok(response);
     }
 } 

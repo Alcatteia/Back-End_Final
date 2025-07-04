@@ -17,7 +17,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/kanban/tarefas")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class KanbanTarefaController {
     
     private final KanbanTarefaService kanbanTarefaService;
@@ -121,13 +120,9 @@ public class KanbanTarefaController {
      */
     @PutMapping("/{id}/status")
     public ResponseEntity<KanbanTarefaDTO> atualizarStatus(@PathVariable Integer id, @RequestBody Map<String, String> statusData) {
-        try {
-            String novoStatus = statusData.get("status");
-            KanbanTarefaDTO tarefaAtualizada = kanbanTarefaService.atualizarStatus(id, novoStatus);
-            return ResponseEntity.ok(tarefaAtualizada);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        String novoStatus = statusData.get("status");
+        KanbanTarefaDTO tarefaAtualizada = kanbanTarefaService.atualizarStatus(id, novoStatus);
+        return ResponseEntity.ok(tarefaAtualizada);
     }
 
     /**
@@ -136,13 +131,9 @@ public class KanbanTarefaController {
      */
     @PutMapping("/{id}/responsavel")
     public ResponseEntity<KanbanTarefaDTO> atribuirResponsavel(@PathVariable Integer id, @RequestBody Map<String, Integer> responsavelData) {
-        try {
-            Integer responsavelId = responsavelData.get("responsavelId");
-            KanbanTarefaDTO tarefaAtualizada = kanbanTarefaService.atribuirResponsavel(id, responsavelId);
-            return ResponseEntity.ok(tarefaAtualizada);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        Integer responsavelId = responsavelData.get("responsavelId");
+        KanbanTarefaDTO tarefaAtualizada = kanbanTarefaService.atribuirResponsavel(id, responsavelId);
+        return ResponseEntity.ok(tarefaAtualizada);
     }
 
     /**
@@ -151,12 +142,8 @@ public class KanbanTarefaController {
      */
     @DeleteMapping("/{id}/responsavel")
     public ResponseEntity<KanbanTarefaDTO> removerResponsavel(@PathVariable Integer id) {
-        try {
-            KanbanTarefaDTO tarefaAtualizada = kanbanTarefaService.atribuirResponsavel(id, null);
-            return ResponseEntity.ok(tarefaAtualizada);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        KanbanTarefaDTO tarefaAtualizada = kanbanTarefaService.atribuirResponsavel(id, null);
+        return ResponseEntity.ok(tarefaAtualizada);
     }
 
     /**
@@ -165,13 +152,9 @@ public class KanbanTarefaController {
      */
     @PutMapping("/categoria/{categoriaId}/reordenar")
     public ResponseEntity<List<KanbanTarefaDTO>> reordenarTarefas(@PathVariable Integer categoriaId, @RequestBody Map<String, List<Integer>> payload) {
-        try {
-            List<Integer> idsOrdenados = payload.get("idsOrdenados");
-            List<KanbanTarefaDTO> tarefasReordenadas = kanbanTarefaService.reordenarTarefas(categoriaId, idsOrdenados);
-            return ResponseEntity.ok(tarefasReordenadas);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        List<Integer> idsOrdenados = payload.get("idsOrdenados");
+        List<KanbanTarefaDTO> tarefasReordenadas = kanbanTarefaService.reordenarTarefas(categoriaId, idsOrdenados);
+        return ResponseEntity.ok(tarefasReordenadas);
     }
 
     /**
@@ -180,13 +163,9 @@ public class KanbanTarefaController {
      */
     @PostMapping("/{id}/horas")
     public ResponseEntity<KanbanTarefaDTO> adicionarHorasTrabalhadas(@PathVariable Integer id, @RequestBody Map<String, BigDecimal> horasData) {
-        try {
-            BigDecimal horas = horasData.get("horas");
-            KanbanTarefaDTO tarefaAtualizada = kanbanTarefaService.adicionarHorasTrabalhadas(id, horas);
-            return ResponseEntity.ok(tarefaAtualizada);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        BigDecimal horas = horasData.get("horas");
+        KanbanTarefaDTO tarefaAtualizada = kanbanTarefaService.adicionarHorasTrabalhadas(id, horas);
+        return ResponseEntity.ok(tarefaAtualizada);
     }
 
     // Endpoints para compatibilidade com código antigo (deprecated)
@@ -196,20 +175,16 @@ public class KanbanTarefaController {
      */
     @PostMapping("/{id}/assign")
     public ResponseEntity<Map<String, String>> atribuirUsuario(@PathVariable Integer id, @RequestBody Map<String, Object> userData) {
-        try {
-            Map<String, Object> user = (Map<String, Object>) userData.get("user");
-            Integer userId = Integer.valueOf(user.get("id").toString());
-            
-            kanbanTarefaService.atribuirResponsavel(id, userId);
-            
-            return ResponseEntity.ok(Map.of(
-                "message", "Usuário atribuído com sucesso",
-                "userId", userId.toString(),
-                "userName", user.get("name").toString()
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Erro ao atribuir usuário"));
-        }
+        Map<String, Object> user = (Map<String, Object>) userData.get("user");
+        Integer userId = Integer.valueOf(user.get("id").toString());
+        
+        kanbanTarefaService.atribuirResponsavel(id, userId);
+        
+        return ResponseEntity.ok(Map.of(
+            "message", "Usuário atribuído com sucesso",
+            "userId", userId.toString(),
+            "userName", user.get("name").toString()
+        ));
     }
 
     /**
@@ -217,15 +192,11 @@ public class KanbanTarefaController {
      */
     @PostMapping("/{id}/unassign")
     public ResponseEntity<Map<String, String>> removerUsuario(@PathVariable Integer id, @RequestBody Map<String, Object> userData) {
-        try {
-            kanbanTarefaService.atribuirResponsavel(id, null);
-            
-            return ResponseEntity.ok(Map.of(
-                "message", "Usuário removido com sucesso"
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Erro ao remover usuário"));
-        }
+        kanbanTarefaService.atribuirResponsavel(id, null);
+        
+        return ResponseEntity.ok(Map.of(
+            "message", "Usuário removido com sucesso"
+        ));
     }
 
     /**

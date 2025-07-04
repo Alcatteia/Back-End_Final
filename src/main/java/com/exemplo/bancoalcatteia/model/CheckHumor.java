@@ -25,6 +25,7 @@ public class CheckHumor {
     private LocalDate dataRegistro;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private Humor humor;
 
     @Column(columnDefinition = "TEXT")
@@ -67,6 +68,7 @@ public class CheckHumor {
         CONTENTE("Contente", 5, 2),
         MOTIVADO("Motivado", 4, 1),
         CALMO("Calmo", 3, 0),
+        NEUTRO("Neutro", 0, 0),
         DESMOTIVADO("Desmotivado", 2, -1),
         ESTRESSADO("Estressado", 1, -2);
 
@@ -129,6 +131,7 @@ public class CheckHumor {
                     case "F" -> "Calma :|";
                     default -> "Calme :|";
                 };
+                case NEUTRO -> "Neutro";
                 case MOTIVADO -> switch (sexoUsuario.toUpperCase()) {
                     case "M" -> "Motivado :)";
                     case "F" -> "Motivada :)";

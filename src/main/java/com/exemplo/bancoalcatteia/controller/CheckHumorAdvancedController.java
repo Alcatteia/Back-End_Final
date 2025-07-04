@@ -36,24 +36,20 @@ public class CheckHumorAdvancedController {
      */
     @GetMapping("/iniciar")
     public ResponseEntity<Map<String, Object>> iniciarCheckIn() {
-        try {
-            Integer usuarioId = currentUserService.getCurrentUserId();
+        Integer usuarioId = currentUserService.getCurrentUserId();
 
-            CheckHumorService.ValidacaoResult validacao =
-                    checkHumorService.validarPodeRealizarCheckIn(usuarioId);
+        CheckHumorService.ValidacaoResult validacao =
+                checkHumorService.validarPodeRealizarCheckIn(usuarioId);
 
-            String menuEmocoes = checkHumorService.gerarMenuEmocoes(usuarioId);
+        String menuEmocoes = checkHumorService.gerarMenuEmocoes(usuarioId);
 
-            Map<String, Object> response = Map.of(
-                    "podeRealizar", validacao.podeRealizar(),
-                    "mensagem", validacao.mensagem(),
-                    "menuEmocoes", menuEmocoes
-            );
+        Map<String, Object> response = Map.of(
+                "podeRealizar", validacao.podeRealizar(),
+                "mensagem", validacao.mensagem(),
+                "menuEmocoes", menuEmocoes
+        );
 
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -62,18 +58,12 @@ public class CheckHumorAdvancedController {
      */
     @PostMapping("/realizar")
     public ResponseEntity<CheckHumorDTO> realizarCheckIn(@Valid @RequestBody CheckHumorDTO checkInDTO) {
-        try {
-            Integer usuarioId = currentUserService.getCurrentUserId();
-            checkInDTO.setUsuarioId(usuarioId);
+        Integer usuarioId = currentUserService.getCurrentUserId();
+        checkInDTO.setUsuarioId(usuarioId);
 
-            CheckHumorDTO resultado = checkHumorService.realizarCheckIn(checkInDTO);
+        CheckHumorDTO resultado = checkHumorService.realizarCheckIn(checkInDTO);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(resultado);
     }
 
     /**
@@ -84,12 +74,8 @@ public class CheckHumorAdvancedController {
     public ResponseEntity<CheckHumorDTO> confirmarSelecao(
             @PathVariable Integer id,
             @RequestParam boolean confirmado) {
-        try {
-            CheckHumorDTO resultado = checkHumorService.confirmarSelecao(id, confirmado);
-            return ResponseEntity.ok(resultado);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        CheckHumorDTO resultado = checkHumorService.confirmarSelecao(id, confirmado);
+        return ResponseEntity.ok(resultado);
     }
 
     /**
@@ -149,17 +135,13 @@ public class CheckHumorAdvancedController {
      */
     @GetMapping("/menu-emocoes")
     public ResponseEntity<Map<String, Object>> obterMenuEmocoes() {
-        try {
-            Integer usuarioId = currentUserService.getCurrentUserId();
-            String menuEmocoes = checkHumorService.gerarMenuEmocoes(usuarioId);
+        Integer usuarioId = currentUserService.getCurrentUserId();
+        String menuEmocoes = checkHumorService.gerarMenuEmocoes(usuarioId);
 
-            Map<String, Object> response = Map.of(
-                    "menuEmocoes", menuEmocoes
-            );
+        Map<String, Object> response = Map.of(
+                "menuEmocoes", menuEmocoes
+        );
 
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.ok(response);
     }
 } 

@@ -1,8 +1,8 @@
 {
   "info": {
-    "name": "🏦 Banco Alcatteia API - JWT Corrigida",
-    "_postman_id": "banco-alcatteia-jwt-2025",
-    "description": "✅ Coleção CORRIGIDA da API do Banco Alcatteia\n\n🔑 INSTRUÇÕES:\n1. Execute primeiro o LOGIN\n2. Token JWT será salvo automaticamente\n3. Todos os endpoints usam Bearer token\n\n👤 USUÁRIOS DE TESTE:\n• ana.silva@bancoalcatteia.com / 123456 (RH)\n• carlos.mendes@bancoalcatteia.com / 123456 (LIDER)\n• fernanda.costa@bancoalcatteia.com / 123456 (FUNC)",
+    "name": "Banco Alcatteia API - Colecao Atualizada 2025",
+    "_postman_id": "banco-alcatteia-2025-v2",
+    "description": "Colecao ATUALIZADA da API do Banco Alcatteia\n\nINSTRUCOES:\n1. Execute primeiro o LOGIN\n2. Token JWT sera salvo automaticamente\n3. Todos os endpoints usam Bearer token\n\nUSUARIOS DE TESTE:\n• ana.silva@bancoalcatteia.com / 123456 (RH)\n• carlos.mendes@bancoalcatteia.com / 123456 (LIDER)\n• fernanda.costa@bancoalcatteia.com / 123456 (FUNC)",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -26,10 +26,10 @@
   },
   "item": [
     {
-      "name": "🔐 AUTENTICAÇÃO",
+      "name": "AUTENTICACAO",
       "item": [
         {
-          "name": "1. LOGIN - Execute Primeiro!",
+          "name": "1. LOGIN - Execute Primeiro",
           "event": [
             {
               "listen": "test",
@@ -38,7 +38,7 @@
                   "if (pm.response.code === 200) {",
                   "    const response = pm.response.json();",
                   "    pm.collectionVariables.set('jwt_token', response.token);",
-                  "    console.log('✅ Token JWT salvo!');",
+                  "    console.log('Token JWT salvo com sucesso!');",
                   "}"
                 ]
               }
@@ -67,7 +67,7 @@
           }
         },
         {
-          "name": "Informações do Usuário",
+          "name": "Informacoes do Usuario",
           "request": {
             "method": "GET",
             "header": [],
@@ -81,10 +81,10 @@
       ]
     },
     {
-      "name": "👥 USUÁRIOS",
+      "name": "USUARIOS",
       "item": [
         {
-          "name": "Listar Usuários (RH/LIDER)",
+          "name": "Listar Usuarios",
           "request": {
             "method": "GET",
             "header": [],
@@ -96,7 +96,7 @@
           }
         },
         {
-          "name": "Buscar Usuário por ID",
+          "name": "Buscar Usuario por ID",
           "request": {
             "method": "GET",
             "header": [],
@@ -108,7 +108,7 @@
           }
         },
         {
-          "name": "Criar Usuário (RH/LIDER)",
+          "name": "Criar Usuario",
           "request": {
             "method": "POST",
             "header": [
@@ -119,7 +119,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"nome\": \"Usuário Teste\",\n    \"email\": \"teste@bancoalcatteia.com\",\n    \"senha\": \"123456\",\n    \"cpf\": \"987.654.321-00\",\n    \"telefone\": \"(11) 99999-9999\",\n    \"tipoUsuario\": \"FUNC\",\n    \"dataNascimento\": \"1995-03-15\",\n    \"ativo\": true\n}"
+              "raw": "{\n    \"nome\": \"Usuario Teste\",\n    \"email\": \"teste@bancoalcatteia.com\",\n    \"senha\": \"123456\",\n    \"tipoUsuario\": \"FUNC\",\n    \"ativo\": true\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/usuarios",
@@ -131,7 +131,7 @@
       ]
     },
     {
-      "name": "📋 TAREFAS",
+      "name": "TAREFAS",
       "item": [
         {
           "name": "Listar Tarefas",
@@ -142,6 +142,18 @@
               "raw": "{{base_url}}/api/tarefas",
               "host": ["{{base_url}}"],
               "path": ["api", "tarefas"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Tarefa por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tarefas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tarefas", "1"]
             }
           }
         },
@@ -157,12 +169,45 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"titulo\": \"Tarefa via Postman\",\n    \"descricao\": \"Teste de criação via API\",\n    \"criadoPorId\": 1,\n    \"responsavelId\": 2,\n    \"dataEntrega\": \"2025-12-31\",\n    \"estimativaHoras\": 8.0,\n    \"prioridade\": \"MEDIA\",\n    \"status\": \"TODO\"\n}"
+              "raw": "{\n    \"titulo\": \"Tarefa via Postman\",\n    \"descricao\": \"Teste de criacao via API\",\n    \"criadoPorId\": 1,\n    \"responsavelId\": 2,\n    \"dataEntrega\": \"2025-12-31\",\n    \"estimativaHoras\": 8.0,\n    \"prioridade\": \"MEDIA\",\n    \"status\": \"TODO\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/tarefas",
               "host": ["{{base_url}}"],
               "path": ["api", "tarefas"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Tarefa",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Tarefa Atualizada\",\n    \"descricao\": \"Descricao atualizada\",\n    \"status\": \"DOING\",\n    \"prioridade\": \"ALTA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/tarefas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tarefas", "1"]
+            }
+          }
+        },
+        {
+          "name": "Deletar Tarefa",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/tarefas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "tarefas", "1"]
             }
           }
         },
@@ -181,10 +226,10 @@
       ]
     },
     {
-      "name": "😊 HUMOR",
+      "name": "CHECK HUMOR",
       "item": [
         {
-          "name": "1. Registrar Humor Diário",
+          "name": "Registrar Humor Diario",
           "request": {
             "method": "POST",
             "header": [
@@ -202,11 +247,11 @@
               "host": ["{{base_url}}"],
               "path": ["api", "check-humor", "registrar"]
             },
-            "description": "Registra humor diário do usuário. Apenas um registro por dia é permitido.\n\nHumores disponíveis:\n- FELIZ: Feliz 😊\n- ANIMADO: Animado 🎉\n- CALMO: Calmo 😌\n- DESANIMADO: Desanimado 😔\n- ESTRESSADO: Estressado 😰"
+            "description": "Registra humor diario do usuario. Apenas um registro por dia e permitido.\n\nHumores disponiveis:\n- FELIZ\n- ANIMADO\n- CALMO\n- DESANIMADO\n- ESTRESSADO"
           }
         },
         {
-          "name": "2. Meu Humor Hoje",
+          "name": "Meu Humor Hoje",
           "request": {
             "method": "GET",
             "header": [],
@@ -214,173 +259,11 @@
               "raw": "{{base_url}}/api/check-humor/meu-humor-hoje",
               "host": ["{{base_url}}"],
               "path": ["api", "check-humor", "meu-humor-hoje"]
-            },
-            "description": "Busca o humor registrado hoje pelo usuário logado"
+            }
           }
         },
         {
-          "name": "3. Meus Humores - Período",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/check-humor/meus-humores?inicio=2025-01-01&fim=2025-01-31",
-              "host": ["{{base_url}}"],
-              "path": ["api", "check-humor", "meus-humores"],
-              "query": [
-                {
-                  "key": "inicio",
-                  "value": "2025-01-01",
-                  "description": "Data de início (formato: YYYY-MM-DD)"
-                },
-                {
-                  "key": "fim",
-                  "value": "2025-01-31",
-                  "description": "Data de fim (formato: YYYY-MM-DD)"
-                }
-              ]
-            },
-            "description": "Lista os humores do usuário logado em um período específico"
-          }
-        },
-        {
-          "name": "4. Comentários Recentes",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/check-humor/comentarios",
-              "host": ["{{base_url}}"],
-              "path": ["api", "check-humor", "comentarios"]
-            },
-            "description": "Busca comentários não anônimos dos últimos 15 dias para exibir em cards laterais"
-          }
-        },
-        {
-          "name": "5. Registrar Humor Anônimo",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"usuarioId\": 1,\n    \"humor\": \"ESTRESSADO\",\n    \"observacao\": \"Muita pressão no trabalho hoje, prazos apertados.\",\n    \"anonimo\": true\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/check-humor/registrar",
-              "host": ["{{base_url}}"],
-              "path": ["api", "check-humor", "registrar"]
-            },
-            "description": "Registra humor com comentário anônimo - o nome do usuário não será exibido"
-          }
-        },
-        {
-          "name": "RH/LIDER - Relatório Quinzenal",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/check-humor/relatorio-quinzenal?inicio=2025-01-01&fim=2025-01-15",
-              "host": ["{{base_url}}"],
-              "path": ["api", "check-humor", "relatorio-quinzenal"],
-              "query": [
-                {
-                  "key": "inicio",
-                  "value": "2025-01-01",
-                  "description": "Data de início do relatório"
-                },
-                {
-                  "key": "fim",
-                  "value": "2025-01-15",
-                  "description": "Data de fim do relatório"
-                }
-              ]
-            },
-            "description": "Gera relatório completo com estatísticas, tendências e análises (apenas RH/LIDER)"
-          }
-        },
-        {
-          "name": "RH/LIDER - Relatório Padrão (15 dias)",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/check-humor/relatorio-default",
-              "host": ["{{base_url}}"],
-              "path": ["api", "check-humor", "relatorio-default"]
-            },
-            "description": "Relatório dos últimos 15 dias (pré-configurado)"
-          }
-        },
-        {
-          "name": "RH/LIDER - Estatísticas Gerais",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/check-humor/estatisticas?inicio=2025-01-01&fim=2025-01-31",
-              "host": ["{{base_url}}"],
-              "path": ["api", "check-humor", "estatisticas"],
-              "query": [
-                {
-                  "key": "inicio",
-                  "value": "2025-01-01",
-                  "description": "Data de início (opcional)"
-                },
-                {
-                  "key": "fim",
-                  "value": "2025-01-31",
-                  "description": "Data de fim (opcional)"
-                }
-              ]
-            },
-            "description": "Estatísticas resumidas do período (apenas RH/LIDER)"
-          }
-        },
-        {
-          "name": "RH/LIDER - Humores de Usuário",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/check-humor/usuario/3?inicio=2025-01-01&fim=2025-01-31",
-              "host": ["{{base_url}}"],
-              "path": ["api", "check-humor", "usuario", "3"],
-              "query": [
-                {
-                  "key": "inicio",
-                  "value": "2025-01-01",
-                  "description": "Data de início"
-                },
-                {
-                  "key": "fim",
-                  "value": "2025-01-31",
-                  "description": "Data de fim"
-                }
-              ]
-            },
-            "description": "Lista humores de um usuário específico (apenas RH/LIDER)"
-          }
-        },
-        {
-          "name": "Admin - Listar Todos",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/check-humor",
-              "host": ["{{base_url}}"],
-              "path": ["api", "check-humor"]
-            },
-            "description": "Lista todos os registros de humor (apenas RH/LIDER)"
-          }
-        },
-        {
-          "name": "Admin - Buscar por ID",
+          "name": "Buscar Check Humor por ID",
           "request": {
             "method": "GET",
             "header": [],
@@ -388,12 +271,11 @@
               "raw": "{{base_url}}/api/check-humor/1",
               "host": ["{{base_url}}"],
               "path": ["api", "check-humor", "1"]
-            },
-            "description": "Busca registro específico por ID (apenas RH/LIDER)"
+            }
           }
         },
         {
-          "name": "Admin - Atualizar Registro",
+          "name": "Atualizar Check Humor",
           "request": {
             "method": "PUT",
             "header": [
@@ -404,18 +286,17 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"usuarioId\": 1,\n    \"humor\": \"CALMO\",\n    \"observacao\": \"Dia tranquilo, sem intercorrências.\",\n    \"anonimo\": false\n}"
+              "raw": "{\n    \"usuarioId\": 1,\n    \"humor\": \"CALMO\",\n    \"observacao\": \"Dia tranquilo, sem intercorrencias.\",\n    \"anonimo\": false\n}"
             },
             "url": {
               "raw": "{{base_url}}/api/check-humor/1",
               "host": ["{{base_url}}"],
               "path": ["api", "check-humor", "1"]
-            },
-            "description": "Atualiza registro existente (apenas RH/LIDER)"
+            }
           }
         },
         {
-          "name": "Admin - Deletar Registro",
+          "name": "Deletar Check Humor",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -423,17 +304,245 @@
               "raw": "{{base_url}}/api/check-humor/1",
               "host": ["{{base_url}}"],
               "path": ["api", "check-humor", "1"]
-            },
-            "description": "Remove registro (apenas RH/LIDER)"
+            }
+          }
+        },
+        {
+          "name": "Relatorio Quinzenal (RH/LIDER)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/check-humor/relatorio-quinzenal?inicio=2025-01-01&fim=2025-01-15",
+              "host": ["{{base_url}}"],
+              "path": ["api", "check-humor", "relatorio-quinzenal"],
+              "query": [
+                {
+                  "key": "inicio",
+                  "value": "2025-01-01"
+                },
+                {
+                  "key": "fim",
+                  "value": "2025-01-15"
+                }
+              ]
+            }
           }
         }
       ]
     },
     {
-      "name": "🎤 KARAOKÊ",
+      "name": "KANBAN TAREFAS",
       "item": [
         {
-          "name": "Listar Músicas",
+          "name": "Listar Kanban Tarefas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/kanban-tarefas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kanban-tarefas"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Kanban Tarefa por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/kanban-tarefas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kanban-tarefas", "1"]
+            }
+          }
+        },
+        {
+          "name": "Criar Kanban Tarefa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Nova Tarefa Kanban\",\n    \"descricao\": \"Descricao da tarefa\",\n    \"categoriaId\": 1,\n    \"responsavelId\": 2,\n    \"dataEntrega\": \"2025-12-31\",\n    \"prioridade\": \"MEDIA\",\n    \"status\": \"ATIVA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/kanban-tarefas",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kanban-tarefas"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar Kanban Tarefa",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Tarefa Kanban Atualizada\",\n    \"descricao\": \"Nova descricao\",\n    \"status\": \"CONCLUIDA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/kanban-tarefas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kanban-tarefas", "1"]
+            }
+          }
+        },
+        {
+          "name": "Deletar Kanban Tarefa",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/kanban-tarefas/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "kanban-tarefas", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DASHBOARDS",
+      "item": [
+        {
+          "name": "Listar Dashboards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboards",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboards"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Dashboard por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboards/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboards", "1"]
+            }
+          }
+        },
+        {
+          "name": "Criar Dashboard",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"usuarioId\": 1,\n    \"tipoDashboard\": \"FUNC\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/dashboards",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboards"]
+            }
+          }
+        },
+        {
+          "name": "Deletar Dashboard",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboards/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboards", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "RELATORIOS",
+      "item": [
+        {
+          "name": "Listar Relatorios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/relatorios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "relatorios"]
+            }
+          }
+        },
+        {
+          "name": "Buscar Relatorio por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/relatorios/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "relatorios", "1"]
+            }
+          }
+        },
+        {
+          "name": "Criar Relatorio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"tipo\": \"MENSAL\",\n    \"geradoPorId\": 1,\n    \"timeId\": 1,\n    \"conteudo\": \"Conteudo do relatorio mensal\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/relatorios",
+              "host": ["{{base_url}}"],
+              "path": ["api", "relatorios"]
+            }
+          }
+        },
+        {
+          "name": "Deletar Relatorio",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/relatorios/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "relatorios", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "KARAOKE",
+      "item": [
+        {
+          "name": "Listar Musicas",
           "request": {
             "method": "GET",
             "header": [],
@@ -445,7 +554,7 @@
           }
         },
         {
-          "name": "Listar Sessões",
+          "name": "Listar Sessoes",
           "request": {
             "method": "GET",
             "header": [],
@@ -459,10 +568,10 @@
       ]
     },
     {
-      "name": "📢 NOTIFICAÇÕES",
+      "name": "NOTIFICACOES",
       "item": [
         {
-          "name": "Listar Notificações",
+          "name": "Listar Notificacoes",
           "request": {
             "method": "GET",
             "header": [],
@@ -476,7 +585,7 @@
       ]
     },
     {
-      "name": "🛠️ UTILITÁRIOS",
+      "name": "UTILITARIOS",
       "item": [
         {
           "name": "Health Check",

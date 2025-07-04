@@ -1,8 +1,12 @@
 package com.exemplo.bancoalcatteia.controller;
 
 //import com.cloudinary.Cloudinary;
+import com.exemplo.bancoalcatteia.dto.LoginDTO;
 import com.exemplo.bancoalcatteia.dto.UsuarioDTO;
+import com.exemplo.bancoalcatteia.service.SessionService;
 import com.exemplo.bancoalcatteia.service.UsuarioService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,22 +14,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 //import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;*/
 
 @RestController
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "http://localhost:5173")
 public class UsuarioController {
 
     /*@Autowired
     private Cloudinary cloudinary;*/
     
     private final UsuarioService usuarioService;
+    private final SessionService sessionService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, SessionService sessionService) {
         this.usuarioService = usuarioService;
+        this.sessionService = sessionService;
     }
 
     @PostMapping("/criar")
@@ -53,9 +61,30 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioDTO> login(@RequestBody UsuarioDTO usuarioDTO) {
-        UsuarioDTO usuarioEncontrado = usuarioService.login(usuarioDTO.getEmail(), usuarioDTO.getSenha());
+    public ResponseEntity<UsuarioDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response) {
+        // Debug: verificar o que está chegando
+        System.out.println("DEBUG - Email recebido: " + loginDTO.getEmail());
+        System.out.println("DEBUG - Senha recebida: " + loginDTO.getSenha());
+        System.out.println("DEBUG - LoginDTO completo: " + loginDTO);
+        
+        UsuarioDTO usuarioEncontrado = usuarioService.login(loginDTO.getEmail(), loginDTO.getSenha(), response);
         return ResponseEntity.ok(usuarioEncontrado);
+    }
+
+    @PostMapping("/test-login-data")
+    public ResponseEntity<Map<String, String>> testLoginData(@RequestBody LoginDTO loginDTO) {
+        Map<String, String> response = new HashMap<>();
+        response.put("email", loginDTO.getEmail());
+        response.put("senha", loginDTO.getSenha());
+        response.put("senhaIsNull", String.valueOf(loginDTO.getSenha() == null));
+        response.put("emailIsNull", String.valueOf(loginDTO.getEmail() == null));
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        sessionService.removeSession(request, response);
+        return ResponseEntity.ok().build();
     }
 
     /*@GetMapping("/imagem/{publicId}")

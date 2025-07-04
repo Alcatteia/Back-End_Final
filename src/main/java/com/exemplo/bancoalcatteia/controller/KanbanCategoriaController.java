@@ -16,7 +16,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/kanban/categorias")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class KanbanCategoriaController {
     
     private final KanbanCategoriaService kanbanCategoriaService;
@@ -61,12 +60,8 @@ public class KanbanCategoriaController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<KanbanCategoriaDTO> buscarPorId(@PathVariable Integer id) {
-        try {
-            KanbanCategoriaDTO categoria = kanbanCategoriaService.buscarPorId(id);
-            return ResponseEntity.ok(categoria);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        KanbanCategoriaDTO categoria = kanbanCategoriaService.buscarPorId(id);
+        return ResponseEntity.ok(categoria);
     }
 
     /**
@@ -75,12 +70,8 @@ public class KanbanCategoriaController {
      */
     @PostMapping
     public ResponseEntity<KanbanCategoriaDTO> criar(@Valid @RequestBody KanbanCategoriaDTO categoriaDTO) {
-        try {
-            KanbanCategoriaDTO categoriaCriada = kanbanCategoriaService.criar(categoriaDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(categoriaCriada);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        KanbanCategoriaDTO categoriaCriada = kanbanCategoriaService.criar(categoriaDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaCriada);
     }
 
     /**
@@ -89,12 +80,8 @@ public class KanbanCategoriaController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<KanbanCategoriaDTO> atualizar(@PathVariable Integer id, @Valid @RequestBody KanbanCategoriaDTO categoriaDTO) {
-        try {
-            KanbanCategoriaDTO categoriaAtualizada = kanbanCategoriaService.atualizar(id, categoriaDTO);
-            return ResponseEntity.ok(categoriaAtualizada);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        KanbanCategoriaDTO categoriaAtualizada = kanbanCategoriaService.atualizar(id, categoriaDTO);
+        return ResponseEntity.ok(categoriaAtualizada);
     }
 
     /**
@@ -103,12 +90,8 @@ public class KanbanCategoriaController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        try {
-            kanbanCategoriaService.deletar(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        kanbanCategoriaService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -117,12 +100,8 @@ public class KanbanCategoriaController {
      */
     @PutMapping("/reordenar")
     public ResponseEntity<List<KanbanCategoriaDTO>> reordenar(@RequestBody Map<String, List<Integer>> payload) {
-        try {
-            List<Integer> idsOrdenados = payload.get("idsOrdenados");
-            List<KanbanCategoriaDTO> categoriasReordenadas = kanbanCategoriaService.reordenar(idsOrdenados);
-            return ResponseEntity.ok(categoriasReordenadas);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        List<Integer> idsOrdenados = payload.get("idsOrdenados");
+        List<KanbanCategoriaDTO> categoriasReordenadas = kanbanCategoriaService.reordenar(idsOrdenados);
+        return ResponseEntity.ok(categoriasReordenadas);
     }
 }

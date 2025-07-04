@@ -39,7 +39,7 @@ public class RelatorioController {
     @GetMapping("/{id}")
     public ResponseEntity<RelatorioDTO> buscarPorId(@PathVariable Integer id) {
         Relatorio relatorio = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Relatório com ID " + id + " não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Relatorio com ID " + id + " nao encontrado"));
         return ResponseEntity.ok(toDTO(relatorio));
     }
 
@@ -59,6 +59,7 @@ public class RelatorioController {
         }
         relatorio.setDataGeracao(LocalDateTime.now());
         relatorio.setConteudo(dto.getConteudo());
+        relatorio.setTitulo(dto.getTitulo());
         Relatorio salvo = repository.save(relatorio);
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(salvo));
     }
@@ -66,7 +67,7 @@ public class RelatorioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         if (!repository.existsById(id)) {
-            throw new EntityNotFoundException("Relatório com ID " + id + " não encontrado");
+            throw new EntityNotFoundException("Relatorio com ID " + id + " nao encontrado");
         }
         repository.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -74,6 +75,7 @@ public class RelatorioController {
 
     private RelatorioDTO toDTO(Relatorio relatorio) {
         RelatorioDTO dto = new RelatorioDTO();
+        dto.setTitulo(relatorio.getTitulo());
         dto.setId(relatorio.getId());
         dto.setTipo(relatorio.getTipo());
         dto.setGeradoPorId(relatorio.getGeradoPor() != null ? relatorio.getGeradoPor().getId().longValue() : null);

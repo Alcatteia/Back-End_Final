@@ -31,7 +31,7 @@ public class Time {
     private Usuarios lider;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "criado_por_id", nullable = false)
+    @JoinColumn(name = "criado_por_id", nullable = true)
     private Usuarios criadoPor;
 
     @Column(name = "data_criacao")

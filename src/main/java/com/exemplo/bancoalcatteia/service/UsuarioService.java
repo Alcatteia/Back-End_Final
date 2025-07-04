@@ -1,10 +1,12 @@
 package com.exemplo.bancoalcatteia.service;
 
-import com.exemplo.bancoalcatteia.config.JwtService;
 import com.exemplo.bancoalcatteia.dto.UsuarioDTO;
+import com.exemplo.bancoalcatteia.exception.AuthenticationException;
+import com.exemplo.bancoalcatteia.exception.BusinessException;
 import com.exemplo.bancoalcatteia.model.Usuarios;
 import com.exemplo.bancoalcatteia.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,34 +22,42 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final SessionService sessionService;
 
-    public UsuarioDTO login(String email, String senha) {
+    public UsuarioDTO login(String email, String senha, HttpServletResponse response) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new AuthenticationException("Email é obrigatório");
+        }
+        
+        if (senha == null || senha.trim().isEmpty()) {
+            throw new AuthenticationException("Senha é obrigatória");
+        }
+        
         Usuarios usuarios = usuarioRepository.findByEmail(email);
         if(usuarios == null) {
-            throw new EntityNotFoundException("Usuário não encontrado");
+            throw new AuthenticationException("Usuário não encontrado");
         }
         
         if(!passwordEncoder.matches(senha, usuarios.getSenha())) {
-            throw new IllegalArgumentException("Senha incorreta");
+            throw new AuthenticationException("Senha incorreta");
         }
         
-        // Gerar token JWT
-        String token = jwtService.generateToken(
-            usuarios.getEmail(), 
-            usuarios.getId(), 
-            usuarios.getTipoUsuario().name()
-        );
+        // Criar sessão em vez de gerar token JWT
+        sessionService.createSession(usuarios.getId(), response);
         
         UsuarioDTO dto = convertToDTO(usuarios);
-        dto.setToken(token);
+        // Não retornar mais o token
         return dto;
     }
 
     public UsuarioDTO buscarPorEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new BusinessException("Email é obrigatório");
+        }
+        
         Usuarios usuarios = usuarioRepository.findByEmail(email);
         if(usuarios == null) {
-            throw new EntityNotFoundException("Usuarios com email " + email + " não encontrado");
+            throw new EntityNotFoundException("Usuário com email " + email + " não encontrado");
         }
         return convertToDTO(usuarios);
     }

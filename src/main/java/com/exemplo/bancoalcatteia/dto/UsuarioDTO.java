@@ -21,7 +21,4 @@ public class UsuarioDTO {
 
     //private String imagem;
     private String descricao;
-    
-    // Campo para retornar token JWT no login
-    private String token;
 }

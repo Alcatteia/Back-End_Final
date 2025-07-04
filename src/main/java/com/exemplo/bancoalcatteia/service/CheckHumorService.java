@@ -68,6 +68,14 @@ public class CheckHumorService {
     }
 
     /**
+     * Busca humor de hoje do usuário - lança exceção se não encontrar
+     */
+    public CheckHumorDTO buscarHumorHojeObrigatorio(Integer usuarioId) {
+        return buscarHumorHoje(usuarioId)
+                .orElseThrow(() -> new EntityNotFoundException("Humor de hoje não encontrado para o usuário ID: " + usuarioId));
+    }
+
+    /**
      * Lista humores do usuário por período
      */
     public List<CheckHumorDTO> listarHumoresUsuario(Integer usuarioId, LocalDate inicio, LocalDate fim) {
@@ -114,20 +122,20 @@ public class CheckHumorService {
     }
 
     /**
-     * Confirma ou cancela seleção de humor
+     * Confirma selecao de humor no check-in
      */
     public CheckHumorDTO confirmarSelecao(Integer checkInId, boolean confirmado) {
         CheckHumor checkIn = checkHumorRepository.findById(checkInId)
-                .orElseThrow(() -> new EntityNotFoundException("Check-in não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Check-in com ID " + checkInId + " nao encontrado"));
 
-        checkIn.setConfirmado(confirmado);
-
-        if (!confirmado) {
-            checkIn.setDataCriacao(null);
+        if (checkIn.getDataRegistro().isBefore(LocalDate.now())) {
+            throw new IllegalStateException("Nao eh possivel confirmar check-in de datas anteriores");
         }
 
-        CheckHumor atualizado = checkHumorRepository.save(checkIn);
-        return convertToDTOAvancado(atualizado);
+        checkIn.setConfirmado(confirmado);
+        CheckHumor checkInConfirmado = checkHumorRepository.save(checkIn);
+
+        return convertToDTOAvancado(checkInConfirmado);
     }
 
     /**
@@ -184,7 +192,7 @@ public class CheckHumorService {
     }
 
     /**
-     * Busca registro por ID
+     * Busca por ID
      */
     public CheckHumorDTO buscarPorId(Integer id) {
         CheckHumor checkHumor = checkHumorRepository.findById(id)
@@ -193,22 +201,16 @@ public class CheckHumorService {
     }
 
     /**
-     * Atualiza registro existente
+     * Atualiza registro
      */
     public CheckHumorDTO atualizar(Integer id, CheckHumorDTO checkHumorDTO) {
         CheckHumor checkHumorExistente = checkHumorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(HumorConstants.MSG_CHECK_HUMOR_NAO_ENCONTRADO + " com ID " + id));
 
-        validarCheckHumor(checkHumorDTO);
-        
-        if (checkHumorDTO.getUsuarioId() != null) {
-            Usuarios usuarios = usuarioRepository.findById(checkHumorDTO.getUsuarioId())
-                    .orElseThrow(() -> new EntityNotFoundException(HumorConstants.MSG_USUARIO_NAO_ENCONTRADO + " com ID " + checkHumorDTO.getUsuarioId()));
-            checkHumorExistente.setUsuario(usuarios);
-        }
-        
-        if (checkHumorDTO.getHumor() != null) {
-            checkHumorExistente.setHumor(CheckHumor.Humor.valueOf(checkHumorDTO.getHumor()));
+        // Verificar se o usuario pode editar este registro
+        if (checkHumorDTO.getUsuarioId() != null && 
+            !checkHumorExistente.getUsuario().getId().equals(checkHumorDTO.getUsuarioId())) {
+            throw new IllegalArgumentException("Usuario nao pode editar este registro");
         }
         
         checkHumorExistente.setObservacao(checkHumorDTO.getObservacao());

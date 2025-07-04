@@ -3,16 +3,13 @@ package com.exemplo.bancoalcatteia.service;
 import com.exemplo.bancoalcatteia.model.Role;
 import com.exemplo.bancoalcatteia.model.Usuarios;
 import com.exemplo.bancoalcatteia.repository.UsuarioRepository;
-
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 /**
  * Service responsável por gerenciar informações do usuário atual logado
@@ -22,61 +19,60 @@ import jakarta.servlet.http.HttpServletRequest;
 public class CurrentUserService {
 
     private final UsuarioRepository usuarioRepository;
+    private final SessionService sessionService;
 
     /**
-     * Obtém o ID do usuário atualmente logado através do JWT
-     * @return ID do usuário logado
+     * Obtém o ID do usuário atualmente logado através da sessão
+     * @return ID do usuário logado, ou null se não autenticado
      */
     public Integer getCurrentUserId() {
         HttpServletRequest request = getCurrentRequest();
         if (request != null) {
-            Object userId = request.getAttribute("userId");
-            if (userId instanceof Long) {
-                return ((Long) userId).intValue();
-            }
-            if (userId instanceof Integer) {
-                return (Integer) userId;
-            }
+            return sessionService.getCurrentUserId(request).orElse(null);
         }
-        
-        // Fallback: tentar obter através do email do contexto de segurança
-        return getCurrentUser().getId();
+        return null;
     }
 
     /**
      * Obtém o usuário atualmente logado
-     * @return Entidade Usuarios completa
+     * @return Optional contendo a entidade Usuarios completa, ou Optional.empty() se não autenticado
      */
-    public Usuarios getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
-            throw new EntityNotFoundException("Usuário não autenticado");
+    public Optional<Usuarios> getCurrentUser() {
+        HttpServletRequest request = getCurrentRequest();
+        if (request != null) {
+            return sessionService.getCurrentUser(request);
         }
-        
-        String email = auth.getName();
-        Usuarios usuarios = usuarioRepository.findByEmail(email);
-        if (usuarios == null) {
-            throw new EntityNotFoundException("Usuário com email " + email + " não encontrado");
-        }
-        
-        return usuarios;
+        return Optional.empty();
     }
 
     /**
      * Obtém o role do usuário atual
-     * @return Role do usuário
+     * @return Role do usuário, ou null se não autenticado
      */
-    public Role getCurrentUserRole() {
-        HttpServletRequest request = getCurrentRequest();
-        if (request != null) {
-            Object userRole = request.getAttribute("userRole");
-            if (userRole instanceof String) {
-                return Role.valueOf((String) userRole);
-            }
-        }
-        
-        // Fallback: obter do banco
-        return getCurrentUser().getTipoUsuario();
+    public String getCurrentUserRole() {
+        return getCurrentUser()
+                .map(user -> user.getTipoUsuario().name())
+                .orElse(null);
+    }
+
+    /**
+     * Obtém o role do usuário atual como enum
+     * @return Role do usuário, ou null se não autenticado
+     */
+    public Role getCurrentUserRoleEnum() {
+        return getCurrentUser()
+                .map(Usuarios::getTipoUsuario)
+                .orElse(null);
+    }
+
+    /**
+     * Verifica se o usuário atual tem um role específico
+     * @param role Role a ser verificado
+     * @return true se o usuário tem o role, false caso contrário
+     */
+    public boolean hasRole(String role) {
+        String currentRole = getCurrentUserRole();
+        return currentRole != null && currentRole.equals(role);
     }
 
     /**
@@ -84,7 +80,7 @@ public class CurrentUserService {
      * @return true se for RH
      */
     public boolean isRH() {
-        return getCurrentUserRole() == Role.RH;
+        return getCurrentUserRoleEnum() == Role.RH;
     }
 
     /**
@@ -92,7 +88,7 @@ public class CurrentUserService {
      * @return true se for LIDER
      */
     public boolean isLider() {
-        return getCurrentUserRole() == Role.LIDER;
+        return getCurrentUserRoleEnum() == Role.LIDER;
     }
 
     /**
@@ -100,7 +96,7 @@ public class CurrentUserService {
      * @return true se for RH ou LIDER
      */
     public boolean isRHouLider() {
-        Role role = getCurrentUserRole();
+        Role role = getCurrentUserRoleEnum();
         return role == Role.RH || role == Role.LIDER;
     }
 
@@ -119,18 +115,27 @@ public class CurrentUserService {
         if (isLider()) {
             return true;
         }
-        
-        // FUNC só pode acessar seus próprios dados
-        return getCurrentUserId().equals(usuarioId);
+
+        // FUNC só pode acessar seus próprios dados, se estiver autenticado
+        return getCurrentUserId() != null && getCurrentUserId().equals(usuarioId);
     }
 
+    /**
+     * Verifica se existe um usuário logado
+     * @return true se há usuário logado, false caso contrário
+     */
+    public boolean isAuthenticated() {
+        HttpServletRequest request = getCurrentRequest();
+        return request != null && sessionService.hasValidSession(request);
+    }
+
+    /**
+     * Obtém o HttpServletRequest atual
+     * @return HttpServletRequest atual ou null se não disponível
+     */
     private HttpServletRequest getCurrentRequest() {
-        try {
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-            return attributes.getRequest();
-        } catch (IllegalStateException e) {
-            return null;
-        }
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return attributes != null ? attributes.getRequest() : null;
     }
 } 
 

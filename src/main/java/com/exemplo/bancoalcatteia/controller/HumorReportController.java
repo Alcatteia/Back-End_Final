@@ -2,6 +2,7 @@ package com.exemplo.bancoalcatteia.controller;
 
 import com.exemplo.bancoalcatteia.constants.HumorConstants;
 import com.exemplo.bancoalcatteia.dto.RelatorioHumorDTO;
+import com.exemplo.bancoalcatteia.exception.BusinessException;
 import com.exemplo.bancoalcatteia.service.RelatorioHumorService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -85,7 +86,8 @@ public class HumorReportController {
         
         // Validar período máximo usando constante
         if (inicio.plusMonths(HumorConstants.MESES_MAXIMO_RELATORIO).isBefore(fim)) {
-            return ResponseEntity.badRequest().build();
+            throw new BusinessException("Período do relatório não pode exceder " + 
+                HumorConstants.MESES_MAXIMO_RELATORIO + " meses");
         }
         
         RelatorioHumorDTO relatorio = relatorioService.gerarRelatorioQuinzenal(inicio, fim);

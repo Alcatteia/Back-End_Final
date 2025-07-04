@@ -57,6 +57,7 @@ public interface CheckHumorRepository extends JpaRepository<CheckHumor, Integer>
            "WHEN h.humor = 'CONTENTE' THEN 5 " +
            "WHEN h.humor = 'MOTIVADO' THEN 4 " +
            "WHEN h.humor = 'CALMO' THEN 3 " +
+           "WHEN h.humor = 'NEUTRO' THEN 3 " +
            "WHEN h.humor = 'DESMOTIVADO' THEN 2 " +
            "WHEN h.humor = 'ESTRESSADO' THEN 1 " +
            "ELSE 0 END) FROM CheckHumor h WHERE h.dataRegistro BETWEEN :inicio AND :fim")

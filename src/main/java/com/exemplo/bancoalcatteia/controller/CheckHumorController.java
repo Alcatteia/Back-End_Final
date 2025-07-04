@@ -11,13 +11,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Controller responsável pelo CRUD básico de CheckHumor
@@ -44,12 +43,8 @@ public class CheckHumorController {
      */
     @PostMapping("/registrar")
     public ResponseEntity<CheckHumorDTO> registrarHumorDiario(@Valid @RequestBody CheckHumorDTO humorDTO) {
-        try {
-            CheckHumorDTO humorRegistrado = checkHumorService.registrarHumorDiario(humorDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(humorRegistrado);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+        CheckHumorDTO humorRegistrado = checkHumorService.registrarHumorDiario(humorDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(humorRegistrado);
     }
 
     /**
@@ -59,8 +54,8 @@ public class CheckHumorController {
     @GetMapping("/meu-humor-hoje")
     public ResponseEntity<CheckHumorDTO> meuHumorHoje() {
         Integer usuarioId = currentUserService.getCurrentUserId();
-        Optional<CheckHumorDTO> humor = checkHumorService.buscarHumorHoje(usuarioId);
-        return humor.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        CheckHumorDTO humor = checkHumorService.buscarHumorHojeObrigatorio(usuarioId);
+        return ResponseEntity.ok(humor);
     }
 
     /**
@@ -108,11 +103,11 @@ public class CheckHumorController {
     public ResponseEntity<CheckHumorDTO> buscarHumorHoje(@PathVariable Integer usuarioId) {
         // Verificar se o usuário pode acessar esses dados
         if (!currentUserService.canAccessUserData(usuarioId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new AccessDeniedException("Acesso negado para visualizar dados do usuário");
         }
         
-        Optional<CheckHumorDTO> humor = checkHumorService.buscarHumorHoje(usuarioId);
-        return humor.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        CheckHumorDTO humor = checkHumorService.buscarHumorHojeObrigatorio(usuarioId);
+        return ResponseEntity.ok(humor);
     }
 
     /**
@@ -161,12 +156,8 @@ public class CheckHumorController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<CheckHumorDTO> buscarPorId(@PathVariable Integer id) {
-        try {
-            CheckHumorDTO humor = checkHumorService.buscarPorId(id);
-            return ResponseEntity.ok(humor);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        CheckHumorDTO humor = checkHumorService.buscarPorId(id);
+        return ResponseEntity.ok(humor);
     }
 
     /**
@@ -175,12 +166,8 @@ public class CheckHumorController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<CheckHumorDTO> atualizar(@PathVariable Integer id, @Valid @RequestBody CheckHumorDTO humorDTO) {
-        try {
-            CheckHumorDTO humorAtualizado = checkHumorService.atualizar(id, humorDTO);
-            return ResponseEntity.ok(humorAtualizado);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        CheckHumorDTO humorAtualizado = checkHumorService.atualizar(id, humorDTO);
+        return ResponseEntity.ok(humorAtualizado);
     }
 
     /**
@@ -189,11 +176,7 @@ public class CheckHumorController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        try {
-            checkHumorService.deletar(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        checkHumorService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

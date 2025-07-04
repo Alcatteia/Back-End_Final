@@ -31,8 +31,8 @@ public class CheckHumorDTO {
     private LocalDate dataRegistroDate; // Para uso interno
     
     @NotBlank(message = "Humor é obrigatório")
-    @Pattern(regexp = "CONTENTE|MOTIVADO|CALMO|DESMOTIVADO|ESTRESSADO", 
-             message = "Humor deve ser: CONTENTE, MOTIVADO, CALMO, DESMOTIVADO ou ESTRESSADO")
+    @Pattern(regexp = "CONTENTE|MOTIVADO|CALMO|NEUTRO|DESMOTIVADO|ESTRESSADO", 
+             message = "Humor deve ser: CONTENTE, MOTIVADO, CALMO, NEUTRO, DESMOTIVADO ou ESTRESSADO")
     private String humor;
     
     private String humorDescricao; // Descrição amigável do humor com emoji

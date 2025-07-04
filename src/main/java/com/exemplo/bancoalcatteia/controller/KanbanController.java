@@ -18,7 +18,6 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/kanban")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class KanbanController {
 
     private final KanbanCategoriaService kanbanCategoriaService;
@@ -46,24 +45,16 @@ public class KanbanController {
      */
     @GetMapping("/board")
     public ResponseEntity<Map<String, Object>> obterKanbanCompleto() {
-        try {
-            List<KanbanCategoriaDTO> categorias = kanbanCategoriaService.listarTodos();
-            List<KanbanTarefaDTO> tarefas = kanbanTarefaService.listarTodos();
-            
-            Map<String, Object> kanbanBoard = new HashMap<>();
-            kanbanBoard.put("categorias", categorias);
-            kanbanBoard.put("tarefas", tarefas);
-            kanbanBoard.put("status", "success");
-            kanbanBoard.put("timestamp", System.currentTimeMillis());
-            
-            return ResponseEntity.ok(kanbanBoard);
-        } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", "error");
-            errorResponse.put("message", "Erro ao carregar dados do Kanban");
-            errorResponse.put("timestamp", System.currentTimeMillis());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
+        List<KanbanCategoriaDTO> categorias = kanbanCategoriaService.listarTodos();
+        List<KanbanTarefaDTO> tarefas = kanbanTarefaService.listarTodos();
+        
+        Map<String, Object> kanbanBoard = new HashMap<>();
+        kanbanBoard.put("categorias", categorias);
+        kanbanBoard.put("tarefas", tarefas);
+        kanbanBoard.put("status", "success");
+        kanbanBoard.put("timestamp", System.currentTimeMillis());
+        
+        return ResponseEntity.ok(kanbanBoard);
     }
 
     /**
@@ -72,37 +63,28 @@ public class KanbanController {
      */
     @GetMapping("/user-data/{userId}")
     public ResponseEntity<Map<String, Object>> obterDadosUsuario(@PathVariable String userId) {
-        try {
-            // Limpar userId de valores mock
-            String cleanUserId = userId.replace("-mockuserid", "").replace("userid-", "");
+        // Limpar userId de valores mock
+        String cleanUserId = userId.replace("-mockuserid", "").replace("userid-", "");
+        
+        Map<String, Object> userData = new HashMap<>();
+        
+        // Se for um ID numérico válido, buscar dados específicos
+        if (cleanUserId.matches("\\d+")) {
+            Long userIdLong = Long.valueOf(cleanUserId);
+            List<KanbanTarefaDTO> minhasTarefas = kanbanTarefaService.listarMinhasTarefas();
             
-            Map<String, Object> userData = new HashMap<>();
-            
-            // Se for um ID numérico válido, buscar dados específicos
-            if (cleanUserId.matches("\\d+")) {
-                Long userIdLong = Long.valueOf(cleanUserId);
-                List<KanbanTarefaDTO> minhasTarefas = kanbanTarefaService.listarMinhasTarefas();
-                
-                userData.put("userId", userIdLong);
-                userData.put("minhasTarefas", minhasTarefas);
-            } else {
-                // Retornar dados gerais
-                userData.put("userId", cleanUserId);
-                userData.put("minhasTarefas", List.of());
-            }
-            
-            userData.put("status", "success");
-            userData.put("timestamp", System.currentTimeMillis());
-            
-            return ResponseEntity.ok(userData);
-        } catch (Exception e) {
-            Map<String, Object> errorResponse = new HashMap<>();
-            errorResponse.put("status", "error");
-            errorResponse.put("message", "Erro ao carregar dados do usuário");
-            errorResponse.put("userId", userId);
-            errorResponse.put("timestamp", System.currentTimeMillis());
-            return ResponseEntity.ok(errorResponse); // Retorna 200 para evitar erros no frontend
+            userData.put("userId", userIdLong);
+            userData.put("minhasTarefas", minhasTarefas);
+        } else {
+            // Retornar dados gerais
+            userData.put("userId", cleanUserId);
+            userData.put("minhasTarefas", List.of());
         }
+        
+        userData.put("status", "success");
+        userData.put("timestamp", System.currentTimeMillis());
+        
+        return ResponseEntity.ok(userData);
     }
 
     /**
@@ -133,14 +115,9 @@ public class KanbanController {
         health.put("timestamp", System.currentTimeMillis());
         health.put("version", "1.0.0");
         
-        try {
-            // Teste básico de conectividade com os services
-            kanbanCategoriaService.listarTodos();
-            health.put("database", "CONNECTED");
-        } catch (Exception e) {
-            health.put("database", "ERROR");
-            health.put("error", e.getMessage());
-        }
+        // Teste básico de conectividade com os services
+        kanbanCategoriaService.listarTodos();
+        health.put("database", "CONNECTED");
         
         return ResponseEntity.ok(health);
     }

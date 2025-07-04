@@ -28,7 +28,10 @@ public class Dashboard {
 
     @Column(name = "data_atualizacao", nullable = false)
     private LocalDateTime dataAtualizacao = LocalDateTime.now();
-    
+
+    @Column(name = "titulo", nullable = false, length = 100)
+    private String titulo;
+
     // Construtores
     public Dashboard() {}
 
@@ -99,5 +102,13 @@ public class Dashboard {
     @PreUpdate
     public void preUpdate() {
         this.dataAtualizacao = LocalDateTime.now();
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 }

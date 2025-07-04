@@ -7,4 +7,5 @@ public class DashboardDTO {
     private Integer id;
     private Long usuarioId;
     private String tipoDashboard;
-} 
+    private String titulo;
+}

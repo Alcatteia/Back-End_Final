@@ -115,19 +115,22 @@ CREATE TABLE `times` (
   `nome_time` varchar(100) NOT NULL,
   `descricao` text,
   `lider_id` int DEFAULT NULL,
+  `criado_por_id` int DEFAULT NULL,
   `data_criacao` datetime DEFAULT CURRENT_TIMESTAMP,
   `data_atualizacao` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ativo` boolean DEFAULT TRUE,
+  `cor` varchar(7) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_times_nome` (`nome_time`),
   KEY `idx_times_lider` (`lider_id`),
   KEY `idx_times_ativo` (`ativo`),
-  CONSTRAINT `fk_times_lider` FOREIGN KEY (`lider_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
+  CONSTRAINT `fk_times_lider` FOREIGN KEY (`lider_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `fk_times_criado_por` FOREIGN KEY (`criado_por_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Tabela: membros_time
 CREATE TABLE `membros_time` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `usuario_id` int NOT NULL,
   `time_id` int NOT NULL,
   `data_entrada` date NOT NULL,
@@ -163,7 +166,7 @@ CREATE TABLE `kanban_categorias` (
 
 -- Tabela: tarefas (ATUALIZADA)
 CREATE TABLE `tarefas` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `titulo` varchar(255) NOT NULL,
   `descricao` text,
   `status` enum('TODO','DOING','DONE') DEFAULT 'TODO',
@@ -189,8 +192,8 @@ CREATE TABLE `tarefas` (
 
 -- Tabela: participantes_tarefa (NOVA)
 CREATE TABLE `participantes_tarefa` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `tarefa_id` bigint NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tarefa_id` int NOT NULL,
   `usuario_id` int NOT NULL,
   `status_participacao` enum('PENDENTE','ACEITO','REJEITADO','REMOVIDO') DEFAULT 'PENDENTE',
   `motivo_rejeicao` text,
@@ -208,10 +211,10 @@ CREATE TABLE `participantes_tarefa` (
 
 -- Tabela: notificacoes (NOVA)
 CREATE TABLE `notificacoes` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `usuario_notificado_id` int NOT NULL,
   `tipo_notificacao` enum('TAREFA_ATRIBUIDA','PRAZO_CONCLUSAO','COMENTARIO','TAREFA_ATRASADA','ATUALIZACAO_SOLICITADA','TAREFA_CONCLUIDA','TAREFA_ACEITA','TAREFA_REJEITADA') NOT NULL,
-  `tarefa_id` bigint DEFAULT NULL,
+  `tarefa_id` int DEFAULT NULL,
   `texto_notificacao` text NOT NULL,
   `data_criacao` datetime DEFAULT CURRENT_TIMESTAMP,
   `confirmacao_leitura` boolean DEFAULT FALSE,
@@ -227,7 +230,7 @@ CREATE TABLE `notificacoes` (
 
 -- Tabela: kanban_tarefas
 CREATE TABLE `kanban_tarefas` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `titulo` varchar(100) NOT NULL,
   `descricao` text,
   `categoria_id` int NOT NULL,
@@ -292,7 +295,7 @@ CREATE TABLE `sessao_karaoke` (
 
 -- Tabela: musicas_cantadas
 CREATE TABLE `musicas_cantadas` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `usuario_id` int NOT NULL,
   `musica_id` int NOT NULL,
   `sessao_id` int NOT NULL,
@@ -313,9 +316,9 @@ CREATE TABLE `musicas_cantadas` (
 
 -- Tabela: avaliacoes
 CREATE TABLE `avaliacoes` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `avaliador_id` int NOT NULL,
-  `apresentacao_id` bigint NOT NULL,
+  `apresentacao_id` int NOT NULL,
   `nota` int NOT NULL,
   `comentario` text,
   `data_avaliacao` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -330,7 +333,7 @@ CREATE TABLE `avaliacoes` (
 
 -- Tabela: check_humor
 CREATE TABLE `check_humor` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `usuario_id` int NOT NULL,
   `data_registro` date NOT NULL,
   `humor` enum('FELIZ','ANIMADO','CALMO','DESANIMADO','ESTRESSADO') NOT NULL,
@@ -349,7 +352,7 @@ CREATE TABLE `check_humor` (
 
 -- Tabela: dashboards (ATUALIZADA)
 CREATE TABLE `dashboards` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `usuario_id` int NOT NULL,
   `tipo_dashboard` varchar(50) NOT NULL,
   `configuracao` json DEFAULT NULL,
@@ -364,7 +367,7 @@ CREATE TABLE `dashboards` (
 
 -- Tabela: relatorios
 CREATE TABLE `relatorios` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `titulo` varchar(200) NOT NULL,
   `tipo` varchar(50) NOT NULL,
   `periodo_inicio` date DEFAULT NULL,
@@ -387,7 +390,7 @@ CREATE TABLE `relatorios` (
 
 -- Tabela: feedbacks (NOVA)
 CREATE TABLE `feedbacks` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `usuario_id` int NOT NULL,
   `tipo` enum('SUGESTAO','RECLAMACAO','ELOGIO','BUG_REPORT','MELHORIA','DUVIDA') NOT NULL,
   `titulo` varchar(200) NOT NULL,
@@ -414,7 +417,7 @@ CREATE TABLE `feedbacks` (
 
 -- Tabela: jobs (NOVA)
 CREATE TABLE `jobs` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   `descricao` text,
   `tipo` enum('NOTIFICACAO_PRAZO','BACKUP_DADOS','LIMPEZA_LOGS','RELATORIO_AUTOMATICO','ENVIO_EMAIL','SINCRONIZACAO','MANUTENCAO') NOT NULL,
@@ -464,12 +467,12 @@ INSERT INTO usuarios (nome, email, senha, tipo_usuario, data_nascimento, data_cr
 -- ==================================================
 -- 2. TIMES
 -- ==================================================
-INSERT INTO times (nome_time, lider_id) VALUES
-('Desenvolvimento Backend', 2),
-('Desenvolvimento Frontend', 6),
-('Quality Assurance', 2),
-('Recursos Humanos', 1),
-('DevOps', 6);
+INSERT INTO times (nome_time, lider_id, criado_por_id) VALUES
+('Desenvolvimento Backend', 2, 1),
+('Desenvolvimento Frontend', 6, 1),
+('Quality Assurance', 2, 1),
+('Recursos Humanos', 1, 1),
+('DevOps', 6, 1);
 
 -- ==================================================
 -- 3. MEMBROS DOS TIMES
