@@ -20,7 +20,9 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                     "http://localhost:5173", 
                     "http://localhost:8080",
-                    "https://back-endfinal-production.up.railway.app"
+                    "https://back-endfinal-production.up.railway.app",
+                    "https://alcatteia-wine.vercel.app",
+                    "https://*.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
                 .allowedHeaders("*")
@@ -47,7 +49,9 @@ public class CorsConfig implements WebMvcConfigurer {
         configuration.setAllowedOrigins(List.of(
             "http://localhost:5173", 
             "http://localhost:8080",
-            "https://back-endfinal-production.up.railway.app"
+            "https://back-endfinal-production.up.railway.app",
+            "https://alcatteia-wine.vercel.app",
+            "https://*.vercel.app"
         ));
         
         // Tempo de cache para requisições preflight (1 hora)
